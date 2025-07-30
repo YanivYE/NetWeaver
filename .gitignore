@@ -1,6 +1,10 @@
 ### IntelliJ ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, PyCharm, etc.
 
+# Env
+.env
+*.run
+
 # User-specific files
 .idea/
 *.iml

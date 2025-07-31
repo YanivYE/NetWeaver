@@ -15,7 +15,7 @@ public class CrawlRequestDTO {
     private int pages;
 
     @JsonProperty("time_limit")
-    private int timeLimit;
+    private long timeLimit;
 
     @JsonProperty("restrictions")
     private String[] restrictions;
@@ -39,7 +39,7 @@ public class CrawlRequestDTO {
         return this.pages;
     }
 
-    public int timeLimit() {
+    public long timeLimit() {
         return this.timeLimit;
     }
 

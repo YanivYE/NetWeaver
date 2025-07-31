@@ -27,4 +27,31 @@ public class CrawlRequestDTO {
     private CrawlModeDTO mode;
 
 
+    public String startUrl() {
+        return this.startUrl;
+    }
+
+    public int depth() {
+        return this.depth;
+    }
+
+    public int pages() {
+        return this.pages;
+    }
+
+    public int timeLimit() {
+        return this.timeLimit;
+    }
+
+    public String[] restrictions() {
+        return this.restrictions;
+    }
+
+    public String userAgent() {
+        return this.userAgent;
+    }
+
+    public CrawlModeDTO mode() {
+        return this.mode;
+    }
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 public class CrawlController {
 
     @PostMapping("")
-    public ResponseEntity<Object> startCrawl(@RequestBody CrawlRequestDTO dto) {
-
+    public ResponseEntity<Object> startCrawl(@RequestBody CrawlRequestDTO crawlRequest) {
     }
 }

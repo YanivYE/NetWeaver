@@ -1,6 +1,9 @@
 package com.NetWeaver.DTO;
 
 import com.NetWeaver.CrawlMode;
+import com.NetWeaver.DTO.Modes.CorrelationModeDTO;
+import com.NetWeaver.DTO.Modes.SearchModeDTO;
+import com.NetWeaver.DTO.Modes.SitemapModeDTO;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

@@ -1,4 +1,4 @@
-package com.NetWeaver.DTO;
+package com.NetWeaver;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -15,7 +15,7 @@ public enum CrawlMode {
     }
 
     @JsonValue
-    public String getValue() {
+    public String value() {
         return value;
     }
 

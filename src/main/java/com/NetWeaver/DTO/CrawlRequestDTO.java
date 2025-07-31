@@ -5,26 +5,26 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CrawlRequestDTO {
-    @JsonProperty
+    @JsonProperty("start_url")
     private String startUrl;
 
-    @JsonProperty
+    @JsonProperty("depth")
     private int depth;
 
-    @JsonProperty
+    @JsonProperty("pages")
     private int pages;
 
-    @JsonProperty
+    @JsonProperty("time_limit")
     private int timeLimit;
 
-    @JsonProperty
+    @JsonProperty("restrictions")
     private String[] restrictions;
 
-    @JsonProperty
+    @JsonProperty("user_agent")
     private String userAgent;
 
-    @JsonProperty
-    private CrawlMode mode;
+    @JsonProperty("mode")
+    private CrawlModeDTO mode;
 
-    
+
 }

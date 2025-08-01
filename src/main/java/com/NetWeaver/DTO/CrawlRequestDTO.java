@@ -1,5 +1,6 @@
 package com.NetWeaver.DTO;
 
+import com.NetWeaver.DTO.Modes.CrawlModeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,31 +28,31 @@ public class CrawlRequestDTO {
     private CrawlModeDTO mode;
 
 
-    public String startUrl() {
+    public String getStartUrl() {
         return this.startUrl;
     }
 
-    public int depth() {
+    public int getDepth() {
         return this.depth;
     }
 
-    public int pages() {
+    public int getPages() {
         return this.pages;
     }
 
-    public long timeLimit() {
+    public long getTimeLimit() {
         return this.timeLimit;
     }
 
-    public String[] restrictions() {
+    public String[] getRestrictions() {
         return this.restrictions;
     }
 
-    public String userAgent() {
+    public String getUserAgent() {
         return this.userAgent;
     }
 
-    public CrawlModeDTO mode() {
+    public CrawlModeDTO getMode() {
         return this.mode;
     }
 }

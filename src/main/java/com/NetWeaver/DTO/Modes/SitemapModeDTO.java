@@ -1,17 +1,18 @@
 package com.NetWeaver.DTO.Modes;
 
-import com.NetWeaver.CrawlMode;
-import com.NetWeaver.DTO.CrawlModeDTO;
+import com.NetWeaver.Enums.Asset;
+import com.NetWeaver.Enums.CrawlMode;
+import com.NetWeaver.Enums.OutputFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SitemapModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.SITEMAP;
 
     @JsonProperty("format")
-    private String outputFormat;
+    private OutputFormat outputFormat;
 
     @JsonProperty("include_assets")
-    private String[] includeAssets;
+    private Asset[] includeAssets;
 
     @JsonProperty("resolve_redirects")
     private boolean resolveRedirects;
@@ -22,5 +23,21 @@ public class SitemapModeDTO implements CrawlModeDTO {
     @Override
     public CrawlMode getType() {
         return type;
+    }
+
+    public OutputFormat getOutputFormat() {
+        return this.outputFormat;
+    }
+
+    public Asset[] getIncludeAssets() {
+        return this.includeAssets;
+    }
+
+    public boolean getResolveRedirects() {
+        return this.resolveRedirects;
+    }
+
+    public boolean getIncludeBrokenLinks() {
+        return this.includeBrokenLinks;
     }
 }

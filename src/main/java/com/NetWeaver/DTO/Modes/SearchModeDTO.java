@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SearchModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.SEARCH;
 
+    // TODO: Add enums for types
     @JsonProperty("keyword")
     private String searchKeyword;
 

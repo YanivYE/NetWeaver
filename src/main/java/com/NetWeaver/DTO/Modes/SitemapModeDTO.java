@@ -8,9 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SitemapModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.SITEMAP;
 
-    @JsonProperty("format")
-    private OutputFormat outputFormat;
-
     @JsonProperty("include_assets")
     private Asset[] includeAssets;
 
@@ -20,13 +17,12 @@ public class SitemapModeDTO implements CrawlModeDTO {
     @JsonProperty("include_broken_links")
     private boolean includeBrokenLinks;
 
+    @JsonProperty("format")
+    private OutputFormat outputFormat;
+
     @Override
     public CrawlMode getType() {
         return type;
-    }
-
-    public OutputFormat getOutputFormat() {
-        return this.outputFormat;
     }
 
     public Asset[] getIncludeAssets() {
@@ -39,5 +35,9 @@ public class SitemapModeDTO implements CrawlModeDTO {
 
     public boolean getIncludeBrokenLinks() {
         return this.includeBrokenLinks;
+    }
+
+    public OutputFormat getOutputFormat() {
+        return this.outputFormat;
     }
 }

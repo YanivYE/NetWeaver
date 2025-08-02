@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum MatchStrategy {
     EXACT,
-    CONTAINS,
+    PARTIAL,
     REGEX;
 
     @JsonCreator

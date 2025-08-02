@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum LinkType {
     INTERNAL,
-    EXTERNAL;
+    EXTERNAL,
+    NO_FOLLOW;
 
     @JsonCreator
     public static LinkType fromValue(String value) {

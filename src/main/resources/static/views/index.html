@@ -37,9 +37,9 @@
     </div>
 
     <div class="container mt-5 shadow-lg p-4 rounded">
-      <h1 class="mb-4 text-center">NetWeaver - Crawler Configuration</h1>
+      <h1 class="mb-4 text-center">Crawler Configuration</h1>
 
-      <form method="POST" action="/crawl" id="crawlerForm">
+      <form id="crawlerForm">
         <!-- Shared Configuration Fields -->
         <div class="mb-3">
           <label for="startUrl" class="form-label">Start URL</label>
@@ -47,7 +47,7 @@
             type="url"
             class="form-control"
             id="startUrl"
-            name="startUrl"
+            name="start_url"
             placeholder="https://example.com"
             required
           />
@@ -59,7 +59,7 @@
             type="number"
             class="form-control"
             id="depth"
-            name="depth"
+            name="max_depth"
             value="2"
             min="1"
             required
@@ -72,7 +72,7 @@
             type="number"
             class="form-control"
             id="maxPages"
-            name="maxPages"
+            name="max_pages"
             min="1"
             placeholder="100"
           />
@@ -84,7 +84,7 @@
             type="number"
             class="form-control"
             id="timeLimit"
-            name="timeLimit"
+            name="time_limit"
             min="1"
             placeholder="300"
           />
@@ -98,7 +98,7 @@
             type="text"
             class="form-control"
             id="domainRestrictions"
-            name="domainRestrictions"
+            name="restrictions"
             placeholder="example.com,another.com"
           />
         </div>
@@ -109,7 +109,7 @@
             type="text"
             class="form-control"
             id="userAgent"
-            name="userAgent"
+            name="user_agent"
             placeholder="Custom User-Agent"
           />
         </div>
@@ -118,9 +118,11 @@
           <label for="mode" class="form-label">Crawling Mode *</label>
           <select class="form-select" id="mode" name="mode" required>
             <option value="" disabled selected>Select a crawling mode</option>
-            <option value="search">Search Indexer</option>
-            <option value="correlation">Correlation Discovery</option>
-            <option value="sitemap">Domain Map</option>
+            <option value="search" name="search">Search Indexer</option>
+            <option value="correlation" name="correlation">
+              Correlation Discovery
+            </option>
+            <option value="sitemap" name="sitemap">Sitemap Generator</option>
           </select>
         </div>
 
@@ -145,30 +147,73 @@
                   type="text"
                   class="form-control"
                   id="searchKeyword"
-                  name="searchKeyword"
+                  name="keyword"
                   placeholder="Enter keyword or topic to search for"
                 />
               </div>
               <div class="mb-3">
-                <label for="contentType" class="form-label"
-                  >Content Type Filter</label
+                <label for="searchFields" class="form-label"
+                  >Search Fields</label
                 >
-                <select class="form-select" id="contentType" name="contentType">
-                  <option value="all">All Content</option>
-                  <option value="text">Text Only</option>
-                  <option value="images">Images</option>
-                  <option value="documents">Documents</option>
-                </select>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="searchTitle"
+                    name="searchFields"
+                    value="title"
+                  />
+                  <label class="form-check-label" for="searchTitle"
+                    >Title</label
+                  >
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="searchBody"
+                    name="searchFields"
+                    value="body"
+                  />
+                  <label class="form-check-label" for="searchBody">Body</label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="searchMetadata"
+                    name="searchFields"
+                    value="metadata"
+                  />
+                  <label class="form-check-label" for="searchMetadata"
+                    >Metadata</label
+                  >
+                </div>
               </div>
               <div class="mb-3">
-                <label for="searchDepth" class="form-label">Search Depth</label>
+                <label for="matchStrategy" class="form-label"
+                  >Match Strategy</label
+                >
+                <select class="form-select" id="matchStrategy" name="strategy">
+                  <option value="exact">Exact Match</option>
+                  <option value="partial">Partial Match</option>
+                  <option value="regex">Regex Match</option>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label for="minRelevance" class="form-label"
+                  >Minimum Relevance (0-1.0)</label
+                >
                 <input
                   type="number"
                   class="form-control"
-                  id="searchDepth"
-                  name="searchDepth"
-                  min="1"
-                  value="3"
+                  id="minRelevance"
+                  name="min_relevance"
+                  min="0"
+                  max="1"
+                  step="0.1"
+                  value="0.5"
                 />
               </div>
             </div>
@@ -187,8 +232,19 @@
             </div>
             <div class="card-body">
               <div class="mb-3">
+                <label for="targetUrl" class="form-label">Target URL</label>
+                <input
+                  type="url"
+                  class="form-control"
+                  id="targetUrl"
+                  name="target_url"
+                  placeholder="https://example.com"
+                  required
+                />
+              </div>
+              <div class="mb-3">
                 <label for="graphType" class="form-label">Graph Type</label>
-                <select class="form-select" id="graphType" name="graphType">
+                <select class="form-select" id="graphType" name="graph_type">
                   <option value="directed">Directed Graph</option>
                   <option value="undirected">Undirected Graph</option>
                   <option value="weighted">Weighted Graph</option>
@@ -236,26 +292,11 @@
                   >
                 </div>
               </div>
-              <div class="mb-3">
-                <label for="correlationThreshold" class="form-label"
-                  >Correlation Threshold</label
-                >
-                <input
-                  type="number"
-                  class="form-control"
-                  id="correlationThreshold"
-                  name="correlationThreshold"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value="0.5"
-                />
-              </div>
             </div>
           </div>
         </div>
 
-        <!-- Domain Map Fields -->
+        <!-- Sitemap Fields -->
         <div
           class="mb-3 mode-specific"
           id="sitemap-fields"
@@ -263,20 +304,9 @@
         >
           <div class="card">
             <div class="card-header">
-              <h6 class="mb-0">Domain Map Configuration</h6>
+              <h6 class="mb-0">Sitemap Configuration</h6>
             </div>
             <div class="card-body">
-              <div class="mb-3">
-                <label for="mapDepth" class="form-label">Map Depth</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="mapDepth"
-                  name="mapDepth"
-                  min="1"
-                  value="3"
-                />
-              </div>
               <div class="mb-3">
                 <label for="includeAssets" class="form-label"
                   >Include Assets</label
@@ -319,6 +349,34 @@
                 </div>
               </div>
               <div class="mb-3">
+                <label class="form-label">Crawling Options</label>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="resolveRedirects"
+                    name="resolve_redirects"
+                    value="true"
+                    checked
+                  />
+                  <label class="form-check-label" for="resolveRedirects">
+                    Resolve Redirects
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    id="includeBrokenLinks"
+                    name="include_broken_links"
+                    value="true"
+                  />
+                  <label class="form-check-label" for="includeBrokenLinks">
+                    Include Broken Links
+                  </label>
+                </div>
+              </div>
+              <div class="mb-3">
                 <label for="outputFormat" class="form-label"
                   >Output Format</label
                 >
@@ -328,7 +386,7 @@
                   name="outputFormat"
                 >
                   <option value="tree">Tree Structure</option>
-                  <option value="sitemap">Sitemap XML</option>
+                  <option value="xml">Sitemap XML</option>
                   <option value="json">JSON</option>
                   <option value="csv">CSV</option>
                 </select>

@@ -9,11 +9,11 @@ public class CrawlRequestDTO {
     @JsonProperty("start_url")
     private String startUrl;
 
-    @JsonProperty("depth")
-    private int depth;
+    @JsonProperty("max_depth")
+    private int maxDepth;
 
-    @JsonProperty("pages")
-    private int pages;
+    @JsonProperty("max_pages")
+    private int maxPages;
 
     @JsonProperty("time_limit")
     private long timeLimit;
@@ -27,17 +27,16 @@ public class CrawlRequestDTO {
     @JsonProperty("mode")
     private CrawlModeDTO mode;
 
-
     public String getStartUrl() {
         return this.startUrl;
     }
 
     public int getDepth() {
-        return this.depth;
+        return this.maxDepth;
     }
 
     public int getPages() {
-        return this.pages;
+        return this.maxPages;
     }
 
     public long getTimeLimit() {

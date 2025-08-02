@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
   initializeTheme();
 
-  initializeForm();
+  initializeClearForm();
 
   initializeModeSwitching();
 });
@@ -36,7 +36,7 @@ const initializeTheme = () => {
 };
 
 // Clear form functionality
-const initializeForm = () => {
+const initializeClearForm = () => {
   const clearForm = document.getElementById("clearForm");
   const crawlerForm = document.getElementById("crawlerForm");
 

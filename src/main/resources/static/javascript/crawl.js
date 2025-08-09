@@ -5,47 +5,86 @@ document.addEventListener("DOMContentLoaded", function () {
 // Form submission functionality
 const initializeFormSubmission = () => {
   const crawlerForm = document.getElementById("crawlerForm");
-  const responseDiv = document.getElementById("response");
 
-  // TODO: send crawl POST and and display result based on chosen mode
-  crawlerForm.addEventListener("submit", function (e) {
-    e.preventDefault();
+  crawlerForm.addEventListener("submit", function (event) {
+    event.preventDefault(); // stop default form POST
 
-    // Show loading state
-    responseDiv.innerHTML = `
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
-          </div>
-          <p class="mt-2">Initializing crawler...</p>
-        </div>
-      `;
+    // Shared fields
+    const startUrl = document.getElementById("startUrl").value.trim();
+    const depth = parseInt(document.getElementById("depth").value, 10);
+    const maxPages = document.getElementById("maxPages").value
+      ? parseInt(document.getElementById("maxPages").value, 10)
+      : undefined;
+    const timeLimit = document.getElementById("timeLimit").value
+      ? parseInt(document.getElementById("timeLimit").value, 10)
+      : undefined;
+    const restrictions = document
+      .getElementById("domainRestrictions")
+      .value.split(",")
+      .map((r) => r.trim())
+      .filter((r) => r !== "");
+    const userAgent = document.getElementById("userAgent").value.trim();
 
-    // Collect form data
-    const formData = new FormData(crawlerForm);
-    const formObject = {};
+    // Mode type
+    const modeType = document.getElementById("mode").value;
 
-    // Convert FormData to object
-    for (let [key, value] of formData.entries()) {
-      // Handle multiple values for checkboxes
-      if (formObject[key]) {
-        if (Array.isArray(formObject[key])) {
-          formObject[key].push(value);
-        } else {
-          formObject[key] = [formObject[key], value];
-        }
-      } else {
-        formObject[key] = value;
-      }
+    // Mode-specific fields
+    let modeData = { type: modeType };
+
+    if (modeType === "search") {
+      modeData.keyword = document.getElementById("searchKeyword").value.trim();
+      modeData.search_fields = Array.from(
+        document.querySelectorAll(
+          "#search-fields input[name='searchFields']:checked"
+        )
+      ).map((el) => el.value);
+      modeData.strategy = document.getElementById("matchStrategy").value;
+      modeData.min_relevance = parseFloat(
+        document.getElementById("minRelevance").value
+      );
     }
 
-    // Send data to server
-    fetch("/crawl", {
+    if (modeType === "correlation") {
+      modeData.target_url = document.getElementById("targetUrl").value.trim();
+      modeData.graph_type = document.getElementById("graphType").value;
+      modeData.link_types = Array.from(
+        document.querySelectorAll(
+          "#correlation-fields input[name='linkTypes']:checked"
+        )
+      ).map((el) => el.value);
+    }
+
+    if (modeType === "sitemap") {
+      modeData.include_assets = Array.from(
+        document.querySelectorAll(
+          "#sitemap-fields input[name='includeAssets']:checked"
+        )
+      ).map((el) => el.value);
+      modeData.resolve_redirects =
+        document.getElementById("resolveRedirects").checked;
+      modeData.include_broken_links =
+        document.getElementById("includeBrokenLinks").checked;
+      modeData.output_format = document.getElementById("outputFormat").value;
+    }
+
+    // Final object
+    const payload = {
+      start_url: startUrl,
+      depth: depth,
+      ...(maxPages !== undefined && { max_pages: maxPages }),
+      ...(timeLimit !== undefined && { time_limit: timeLimit }),
+      ...(restrictions.length > 0 && { restrictions }),
+      ...(userAgent && { user_agent: userAgent }),
+      mode: modeData,
+    };
+
+    console.log("Payload to send:", payload);
+
+    // Example sending JSON to backend
+    fetch("/api/crawl", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formObject),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     })
       .then((response) => {
         if (!response.ok) {

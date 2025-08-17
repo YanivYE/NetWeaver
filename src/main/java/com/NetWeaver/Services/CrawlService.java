@@ -19,26 +19,13 @@ import java.util.concurrent.ExecutorService;
 @Service
 public class CrawlService {
 
-    private final ExecutorService executor;
-    private final CrawlEngine crawlEngine;
-    private final PageSinkFactory sinkFactory;
-    private final ModeHandlerFactory handlerFactory;
-    private final JobService jobService;
-
     @Autowired
-    public CrawlService(
-            ExecutorService executor,
-            CrawlEngine crawlEngine,
-            PageSinkFactory sinkFactory,
-            ModeHandlerFactory handlerFactory,
-            JobService jobService
-    ) {
-        this.executor = executor;
-        this.crawlEngine = crawlEngine;
-        this.sinkFactory = sinkFactory;
-        this.handlerFactory = handlerFactory;
-        this.jobService = jobService;
-    }
+    private JobService jobService;
+
+    private ExecutorService executor;
+    private CrawlEngine crawlEngine;
+    private PageSinkFactory sinkFactory;
+    private ModeHandlerFactory handlerFactory;
 
     public CrawlResult start(CrawlRequest req) {
         UUID crawlId = UUID.randomUUID();
@@ -56,7 +43,7 @@ public class CrawlService {
                 jobService.updateStatus(crawlId, CrawlStatus.COMPLETED);
             } catch (Exception e) {
                 e.printStackTrace();
-                jobService.markFailed(crawlId, e.getMessage());
+                jobService.updateStatus(crawlId, CrawlStatus.FAILED);
             }
         });
 

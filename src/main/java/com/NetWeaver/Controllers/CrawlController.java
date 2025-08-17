@@ -12,7 +12,7 @@ public class CrawlController {
 
     @PostMapping("")
     public ResponseEntity<Object> startCrawl(@RequestBody CrawlRequestDTO crawlRequest) {
-        String url = crawlRequest.getStartUrl();
+        System.out.println(crawlRequest);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 }

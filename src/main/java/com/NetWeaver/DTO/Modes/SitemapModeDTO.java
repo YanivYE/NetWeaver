@@ -17,7 +17,7 @@ public class SitemapModeDTO implements CrawlModeDTO {
     @JsonProperty("include_broken_links")
     private boolean includeBrokenLinks;
 
-    @JsonProperty("format")
+    @JsonProperty("output_format")
     private OutputFormat outputFormat;
 
     @Override

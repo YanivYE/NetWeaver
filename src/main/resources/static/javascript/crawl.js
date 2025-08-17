@@ -1,104 +1,124 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   initializeFormSubmission();
 });
 
-// Form submission functionality
+// --- Helpers ---
+const getValue = (el, parser = (v) => v.trim()) =>
+  el && el.value ? parser(el.value) : undefined;
+
+const getCheckedValues = (selector) =>
+  Array.from(document.querySelectorAll(selector + ":checked")).map(
+    (el) => el.value
+  );
+
+// --- Form Initialization ---
 const initializeFormSubmission = () => {
-  const crawlerForm = document.getElementById("crawlerForm");
+  const form = document.getElementById("crawlerForm");
+  const responseDiv = document.getElementById("response");
 
-  crawlerForm.addEventListener("submit", function (event) {
-    event.preventDefault(); // stop default form POST
+  const elements = {
+    startUrl: document.getElementById("startUrl"),
+    maxDepth: document.getElementById("maxDepth"),
+    maxPages: document.getElementById("maxPages"),
+    timeLimit: document.getElementById("timeLimit"),
+    restrictions: document.getElementById("domainRestrictions"),
+    userAgent: document.getElementById("userAgent"),
+    modeType: document.getElementById("mode"),
 
-    // Shared fields
-    const startUrl = document.getElementById("startUrl").value.trim();
-    const depth = parseInt(document.getElementById("depth").value, 10);
-    const maxPages = document.getElementById("maxPages").value
-      ? parseInt(document.getElementById("maxPages").value, 10)
-      : undefined;
-    const timeLimit = document.getElementById("timeLimit").value
-      ? parseInt(document.getElementById("timeLimit").value, 10)
-      : undefined;
-    const restrictions = document
-      .getElementById("domainRestrictions")
-      .value.split(",")
-      .map((r) => r.trim())
-      .filter((r) => r !== "");
-    const userAgent = document.getElementById("userAgent").value.trim();
+    // Search mode
+    searchKeyword: document.getElementById("searchKeyword"),
+    matchStrategy: document.getElementById("matchStrategy"),
+    minRelevance: document.getElementById("minRelevance"),
 
-    // Mode type
-    const modeType = document.getElementById("mode").value;
+    // Correlation mode
+    targetUrl: document.getElementById("targetUrl"),
+    graphType: document.getElementById("graphType"),
 
-    // Mode-specific fields
-    let modeData = { type: modeType };
+    // Sitemap mode
+    resolveRedirects: document.getElementById("resolveRedirects"),
+    includeBrokenLinks: document.getElementById("includeBrokenLinks"),
+    outputFormat: document.getElementById("outputFormat"),
+  };
 
-    if (modeType === "search") {
-      modeData.keyword = document.getElementById("searchKeyword").value.trim();
-      modeData.search_fields = Array.from(
-        document.querySelectorAll(
-          "#search-fields input[name='searchFields']:checked"
-        )
-      ).map((el) => el.value);
-      modeData.strategy = document.getElementById("matchStrategy").value;
-      modeData.min_relevance = parseFloat(
-        document.getElementById("minRelevance").value
-      );
-    }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    if (modeType === "correlation") {
-      modeData.target_url = document.getElementById("targetUrl").value.trim();
-      modeData.graph_type = document.getElementById("graphType").value;
-      modeData.link_types = Array.from(
-        document.querySelectorAll(
-          "#correlation-fields input[name='linkTypes']:checked"
-        )
-      ).map((el) => el.value);
-    }
-
-    if (modeType === "sitemap") {
-      modeData.include_assets = Array.from(
-        document.querySelectorAll(
-          "#sitemap-fields input[name='includeAssets']:checked"
-        )
-      ).map((el) => el.value);
-      modeData.resolve_redirects =
-        document.getElementById("resolveRedirects").checked;
-      modeData.include_broken_links =
-        document.getElementById("includeBrokenLinks").checked;
-      modeData.output_format = document.getElementById("outputFormat").value;
-    }
-
-    // Final object
+    // --- Shared fields ---
     const payload = {
-      start_url: startUrl,
-      depth: depth,
-      ...(maxPages !== undefined && { max_pages: maxPages }),
-      ...(timeLimit !== undefined && { time_limit: timeLimit }),
-      ...(restrictions.length > 0 && { restrictions }),
-      ...(userAgent && { user_agent: userAgent }),
-      mode: modeData,
+      start_url: getValue(elements.startUrl) ?? undefined,
+      max_depth: elements.maxDepth.value
+        ? parseInt(elements.maxDepth.value, 10)
+        : undefined,
+      max_pages: elements.maxPages.value
+        ? parseInt(elements.maxPages.value, 10)
+        : undefined,
+      time_limit: elements.timeLimit.value
+        ? parseInt(elements.timeLimit.value, 10)
+        : undefined,
+      restrictions: elements.restrictions.value
+        ? elements.restrictions.value
+            .split(",")
+            .map((r) => r.trim())
+            .filter(Boolean)
+        : undefined,
+      user_agent: elements.userAgent.value
+        ? elements.userAgent.value.trim()
+        : undefined,
     };
+
+    // --- Mode-specific fields ---
+    const modeType = elements.modeType.value;
+    let mode = { type: modeType };
+
+    switch (modeType) {
+      case "search":
+        mode.search_keyword = getValue(elements.searchKeyword) ?? undefined;
+        mode.search_fields = getCheckedValues(
+          "#search-fields input[name='search_fields']"
+        );
+        mode.match_strategy = getValue(elements.matchStrategy) ?? undefined;
+        mode.min_relevance = elements.minRelevance.value
+          ? parseFloat(elements.minRelevance.value)
+          : undefined;
+        break;
+
+      case "correlation":
+        mode.target_url = getValue(elements.targetUrl) ?? undefined;
+        mode.graph_type = getValue(elements.graphType) ?? undefined;
+        mode.link_types = getCheckedValues(
+          "#correlation-fields input[name='link_types']"
+        );
+        break;
+
+      case "sitemap":
+        mode.include_assets = getCheckedValues(
+          "#sitemap-fields input[name='include_assets']"
+        );
+        mode.resolve_redirects = elements.resolveRedirects.checked;
+        mode.include_broken_links = elements.includeBrokenLinks.checked;
+        mode.output_format = getValue(elements.outputFormat) ?? undefined;
+        break;
+    }
+
+    payload.mode = mode;
 
     console.log("Payload to send:", payload);
 
-    // Example sending JSON to backend
-    fetch("/api/crawl", {
+    fetch("/crawl", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
       })
       .then((data) => {
-        // Display success response
         responseDiv.innerHTML = `
           <div class="alert alert-success">
             <h5>✅ Crawler Started Successfully!</h5>
-            <p><strong>Mode:</strong> ${data.mode || "Unknown"}</p>
-            <p><strong>Start URL:</strong> ${data.startUrl || "Unknown"}</p>
+            <p><strong>Mode:</strong> ${data.mode?.type || "Unknown"}</p>
+            <p><strong>Start URL:</strong> ${data.start_url || "Unknown"}</p>
             <p><strong>Status:</strong> ${data.status || "Running"}</p>
             ${
               data.message
@@ -106,19 +126,16 @@ const initializeFormSubmission = () => {
                 : ""
             }
             ${data.jobId ? `<p><strong>Job ID:</strong> ${data.jobId}</p>` : ""}
-          </div>
-        `;
+          </div>`;
       })
-      .catch((error) => {
-        console.error("Error:", error);
-        // Display error response
+      .catch((err) => {
+        console.error("Error:", err);
         responseDiv.innerHTML = `
           <div class="alert alert-danger">
             <h5>❌ Error Starting Crawler</h5>
-            <p><strong>Error:</strong> ${error.message}</p>
+            <p><strong>Error:</strong> ${err.message}</p>
             <p>Please check your configuration and try again.</p>
-          </div>
-        `;
+          </div>`;
       });
   });
 };

@@ -8,13 +8,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class SearchModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.SEARCH;
 
-    @JsonProperty("keyword")
+    @JsonProperty("search_keyword")
     private String searchKeyword;
 
-    @JsonProperty("fields")
+    @JsonProperty("search_fields")
     private SearchField[] searchFields;
 
-    @JsonProperty("strategy")
+    @JsonProperty("match_strategy")
     private MatchStrategy matchStrategy;
 
     @JsonProperty("min_relevance")

@@ -58,11 +58,10 @@
           <input
             type="number"
             class="form-control"
-            id="depth"
+            id="maxDepth"
             name="max_depth"
             value="2"
             min="1"
-            required
           />
         </div>
 
@@ -73,8 +72,8 @@
             class="form-control"
             id="maxPages"
             name="max_pages"
+            value="100"
             min="1"
-            placeholder="100"
           />
         </div>
 
@@ -86,7 +85,7 @@
             id="timeLimit"
             name="time_limit"
             min="1"
-            placeholder="300"
+            value="300"
           />
         </div>
 
@@ -147,12 +146,12 @@
                   type="text"
                   class="form-control"
                   id="searchKeyword"
-                  name="keyword"
+                  name="search_keyword"
                   placeholder="Enter keyword or topic to search for"
                 />
               </div>
               <div class="mb-3">
-                <label for="searchFields" class="form-label"
+                <label for="search_fields" class="form-label"
                   >Search Fields</label
                 >
                 <div class="form-check">
@@ -160,7 +159,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="searchTitle"
-                    name="searchFields"
+                    name="search_fields"
                     value="title"
                   />
                   <label class="form-check-label" for="searchTitle"
@@ -172,7 +171,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="searchBody"
-                    name="searchFields"
+                    name="search_fields"
                     value="body"
                   />
                   <label class="form-check-label" for="searchBody">Body</label>
@@ -182,7 +181,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="searchMetadata"
-                    name="searchFields"
+                    name="search_fields"
                     value="metadata"
                   />
                   <label class="form-check-label" for="searchMetadata"
@@ -194,7 +193,11 @@
                 <label for="matchStrategy" class="form-label"
                   >Match Strategy</label
                 >
-                <select class="form-select" id="matchStrategy" name="strategy">
+                <select
+                  class="form-select"
+                  id="matchStrategy"
+                  name="match_strategy"
+                >
                   <option value="exact">Exact Match</option>
                   <option value="partial">Partial Match</option>
                   <option value="regex">Regex Match</option>
@@ -250,7 +253,7 @@
                 </select>
               </div>
               <div class="mb-3">
-                <label for="linkTypes" class="form-label"
+                <label for="link_types" class="form-label"
                   >Link Types to Track</label
                 >
                 <div class="form-check">
@@ -258,7 +261,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="internalLinks"
-                    name="linkTypes"
+                    name="link_types"
                     value="internal"
                     checked
                   />
@@ -271,7 +274,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="externalLinks"
-                    name="linkTypes"
+                    name="link_types"
                     value="external"
                   />
                   <label class="form-check-label" for="externalLinks"
@@ -283,7 +286,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="nofollowLinks"
-                    name="linkTypes"
+                    name="link_types"
                     value="nofollow"
                   />
                   <label class="form-check-label" for="nofollowLinks"
@@ -307,7 +310,7 @@
             </div>
             <div class="card-body">
               <div class="mb-3">
-                <label for="includeAssets" class="form-label"
+                <label for="include_assets" class="form-label"
                   >Include Assets</label
                 >
                 <div class="form-check">
@@ -315,7 +318,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="includeImages"
-                    name="includeAssets"
+                    name="include_assets"
                     value="images"
                   />
                   <label class="form-check-label" for="includeImages"
@@ -327,7 +330,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="includeCSS"
-                    name="includeAssets"
+                    name="include_assets"
                     value="css"
                   />
                   <label class="form-check-label" for="includeCSS"
@@ -339,7 +342,7 @@
                     class="form-check-input"
                     type="checkbox"
                     id="includeJS"
-                    name="includeAssets"
+                    name="include_assets"
                     value="js"
                   />
                   <label class="form-check-label" for="includeJS"
@@ -382,7 +385,7 @@
                 <select
                   class="form-select"
                   id="outputFormat"
-                  name="outputFormat"
+                  name="output_format"
                 >
                   <option value="tree">Tree Structure</option>
                   <option value="xml">Sitemap XML</option>

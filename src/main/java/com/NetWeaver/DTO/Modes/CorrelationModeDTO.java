@@ -5,13 +5,14 @@ import com.NetWeaver.Enums.GraphType;
 import com.NetWeaver.Enums.LinkType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.URI;
 import java.util.List;
 
 public class CorrelationModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.CORRELATION;
 
     @JsonProperty("target_url")
-    private String targetUrl;
+    private URI targetUrl;
 
     @JsonProperty("graph_type")
     private GraphType graphType;
@@ -20,19 +21,19 @@ public class CorrelationModeDTO implements CrawlModeDTO {
     private List<LinkType> linkTypes;
 
     @Override
-    public CrawlMode getType() {
+    public CrawlMode type() {
         return type;
     }
 
-    public GraphType getGraphType() {
+    public GraphType graphType() {
         return this.graphType;
     }
 
-    public List<LinkType> getLinkTypes() {
+    public List<LinkType> linkTypes() {
         return this.linkTypes;
     }
 
-    public String getTargetUrl() {
+    public URI targetUrl() {
         return this.targetUrl;
     }
 }

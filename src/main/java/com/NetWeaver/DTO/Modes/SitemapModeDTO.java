@@ -27,19 +27,19 @@ public class SitemapModeDTO implements CrawlModeDTO {
         return type;
     }
 
-    public List<Asset> getIncludeAssets() {
+    public List<Asset> includeAssets() {
         return this.includeAssets;
     }
 
-    public boolean getResolveRedirects() {
+    public boolean resolveRedirects() {
         return this.resolveRedirects;
     }
 
-    public boolean getIncludeBrokenLinks() {
+    public boolean includeBrokenLinks() {
         return this.includeBrokenLinks;
     }
 
-    public OutputFormat getOutputFormat() {
+    public OutputFormat outputFormat() {
         return this.outputFormat;
     }
 }

@@ -27,19 +27,19 @@ public class SearchModeDTO implements CrawlModeDTO {
         return type;
     }
 
-    public String getSearchKeyword() {
+    public String searchKeyword() {
         return this.searchKeyword;
     }
 
-    public List<SearchField> getSearchFields() {
+    public List<SearchField> searchFields() {
         return this.searchFields;
     }
 
-    public MatchStrategy getMatchStrategy() {
+    public MatchStrategy matchStrategy() {
         return this.matchStrategy;
     }
 
-    public float getMinRelevance() {
+    public float minRelevance() {
         return this.minRelevance;
     }
 }

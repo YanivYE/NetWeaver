@@ -16,5 +16,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = SitemapModeDTO.class, name = "sitemap")
 })
 public interface CrawlModeDTO {
-    CrawlMode getType();
+    CrawlMode type();
 }

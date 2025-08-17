@@ -4,12 +4,13 @@ import com.NetWeaver.DTO.Modes.CrawlModeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.URI;
 import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CrawlRequestDTO {
+public class CrawlRequest {
     @JsonProperty("start_url")
-    private String startUrl;
+    private URI startUrl;
 
     @JsonProperty("max_depth")
     private int maxDepth;
@@ -29,31 +30,31 @@ public class CrawlRequestDTO {
     @JsonProperty("mode")
     private CrawlModeDTO mode;
 
-    public String getStartUrl() {
+    public URI startUrl() {
         return this.startUrl;
     }
 
-    public int getDepth() {
+    public int depth() {
         return this.maxDepth;
     }
 
-    public int getPages() {
+    public int pages() {
         return this.maxPages;
     }
 
-    public long getTimeLimit() {
+    public long timeLimit() {
         return this.timeLimit;
     }
 
-    public List<String> getRestrictions() {
+    public List<String> restrictions() {
         return this.restrictions;
     }
 
-    public String getUserAgent() {
+    public String userAgent() {
         return this.userAgent;
     }
 
-    public CrawlModeDTO getMode() {
+    public CrawlModeDTO mode() {
         return this.mode;
     }
 }

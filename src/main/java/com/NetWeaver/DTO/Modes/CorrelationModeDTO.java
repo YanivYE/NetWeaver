@@ -5,6 +5,8 @@ import com.NetWeaver.Enums.GraphType;
 import com.NetWeaver.Enums.LinkType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class CorrelationModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.CORRELATION;
 
@@ -15,7 +17,7 @@ public class CorrelationModeDTO implements CrawlModeDTO {
     private GraphType graphType;
 
     @JsonProperty("link_types")
-    private LinkType[] linkTypes;
+    private List<LinkType> linkTypes;
 
     @Override
     public CrawlMode getType() {
@@ -26,7 +28,7 @@ public class CorrelationModeDTO implements CrawlModeDTO {
         return this.graphType;
     }
 
-    public LinkType[] getLinkTypes() {
+    public List<LinkType> getLinkTypes() {
         return this.linkTypes;
     }
 

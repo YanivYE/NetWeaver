@@ -5,11 +5,13 @@ import com.NetWeaver.Enums.CrawlMode;
 import com.NetWeaver.Enums.OutputFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class SitemapModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.SITEMAP;
 
     @JsonProperty("include_assets")
-    private Asset[] includeAssets;
+    private List<Asset> includeAssets;
 
     @JsonProperty("resolve_redirects")
     private boolean resolveRedirects;
@@ -25,7 +27,7 @@ public class SitemapModeDTO implements CrawlModeDTO {
         return type;
     }
 
-    public Asset[] getIncludeAssets() {
+    public List<Asset> getIncludeAssets() {
         return this.includeAssets;
     }
 

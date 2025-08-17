@@ -4,6 +4,8 @@ import com.NetWeaver.DTO.Modes.CrawlModeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CrawlRequestDTO {
     @JsonProperty("start_url")
@@ -19,7 +21,7 @@ public class CrawlRequestDTO {
     private long timeLimit;
 
     @JsonProperty("restrictions")
-    private String[] restrictions;
+    private List<String> restrictions;
 
     @JsonProperty("user_agent")
     private String userAgent;
@@ -43,7 +45,7 @@ public class CrawlRequestDTO {
         return this.timeLimit;
     }
 
-    public String[] getRestrictions() {
+    public List<String> getRestrictions() {
         return this.restrictions;
     }
 

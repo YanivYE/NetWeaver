@@ -5,6 +5,8 @@ import com.NetWeaver.Enums.MatchStrategy;
 import com.NetWeaver.Enums.SearchField;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 public class SearchModeDTO implements CrawlModeDTO {
     private final CrawlMode type = CrawlMode.SEARCH;
 
@@ -12,7 +14,7 @@ public class SearchModeDTO implements CrawlModeDTO {
     private String searchKeyword;
 
     @JsonProperty("search_fields")
-    private SearchField[] searchFields;
+    private List<SearchField> searchFields;
 
     @JsonProperty("match_strategy")
     private MatchStrategy matchStrategy;
@@ -29,7 +31,7 @@ public class SearchModeDTO implements CrawlModeDTO {
         return this.searchKeyword;
     }
 
-    public SearchField[] getSearchFields() {
+    public List<SearchField> getSearchFields() {
         return this.searchFields;
     }
 

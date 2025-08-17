@@ -1,4 +1,4 @@
-package com.NetWeaver.DTO;
+package com.NetWeaver.Models;
 
 import com.NetWeaver.Enums.CrawlStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;

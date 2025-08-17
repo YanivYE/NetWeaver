@@ -1,4 +1,4 @@
-package com.NetWeaver.DTO.Modes;
+package com.NetWeaver.Models.DTO;
 
 import com.NetWeaver.Enums.CrawlMode;
 import com.NetWeaver.Enums.MatchStrategy;

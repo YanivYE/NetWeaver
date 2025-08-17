@@ -1,6 +1,6 @@
-package com.NetWeaver.DTO;
+package com.NetWeaver.Models;
 
-import com.NetWeaver.DTO.Modes.CrawlModeDTO;
+import com.NetWeaver.Models.DTO.CrawlModeDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

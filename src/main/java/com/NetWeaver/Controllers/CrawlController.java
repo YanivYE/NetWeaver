@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class CrawlController {
 
     @Autowired
-    private CrawlService service;
+    private CrawlService crawlService;
 
     @PostMapping
     public ResponseEntity<CrawlResult> start(@RequestBody CrawlRequest req) {
-        CrawlResult result = service.start(req);
+        CrawlResult result = crawlService.start(req);
         return ResponseEntity.ok(result);
     }
 }

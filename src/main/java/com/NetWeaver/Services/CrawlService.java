@@ -33,7 +33,7 @@ public class CrawlService {
 
         jobService.createJob(crawlId, req.startUrl(), req.mode().type(), startedAt, CrawlStatus.QUEUED);
 
-        ModeHandler handler = handlerFactory.getHandler(req.mode().type(), req.mode());
+        ModeHandler handler = handlerFactory.getHandler(req.mode());
         CrawlContext context = mapContext(req, handler);
 
         executor.submit(() -> {

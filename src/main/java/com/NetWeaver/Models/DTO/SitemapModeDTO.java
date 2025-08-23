@@ -23,7 +23,7 @@ public class SitemapModeDTO implements CrawlModeDTO {
     private OutputFormat outputFormat;
 
     @Override
-    public CrawlMode getType() {
+    public CrawlMode type() {
         return type;
     }
 

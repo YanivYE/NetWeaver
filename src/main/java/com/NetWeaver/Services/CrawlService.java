@@ -1,12 +1,12 @@
 package com.NetWeaver.Services;
 
 import com.NetWeaver.Context.CrawlContext;
+import com.NetWeaver.Handlers.ModeHandler;
 import com.NetWeaver.Models.CrawlRequest;
 import com.NetWeaver.Models.CrawlResult;
 import com.NetWeaver.Enums.CrawlStatus;
 import com.NetWeaver.Engine.CrawlEngine;
 import com.NetWeaver.Handlers.ModeHandlerFactory;
-import com.NetWeaver.Handlers.ModeHandler;
 import com.NetWeaver.Sink.PageSink;
 import com.NetWeaver.Sink.PageSinkFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class CrawlService {
 
         executor.submit(() -> {
             jobService.updateStatus(crawlId, CrawlStatus.RUNNING);
-            try (PageSink sink = sinkFactory.createSink(crawlId)) {
+            try (PageSink sink = sinkFactory.createSink(crawlId, req.mode().type())) {
                 crawlEngine.run(context.withSink(sink));
                 jobService.updateStatus(crawlId, CrawlStatus.COMPLETED);
             } catch (Exception e) {

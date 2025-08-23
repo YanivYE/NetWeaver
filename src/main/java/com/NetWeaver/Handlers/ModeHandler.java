@@ -2,10 +2,16 @@ package com.NetWeaver.Handlers;
 
 import com.NetWeaver.Context.CrawlContext;
 import com.NetWeaver.Models.CrawlResult;
+import com.NetWeaver.Sink.PageSink;
 
-public interface ModeHandler {
-    void onPage(CrawlContext ctx, ParsedPage page, int depth, PageSink sink);
-    List<UrlWithDepth> linksToFollow(CrawlContext ctx, ParsedPage page, int depth);
-    CrawlResult finish(CrawlContext ctx, PageSink sink);
+public abstract class ModeHandler {
+    protected CrawlContext context;
+
+    public ModeHandler(CrawlContext context) {
+        this.context = context;
+    }
+
+    public abstract void onPage(ParsedPage page, int depth, PageSink sink);
+    public abstract List<UrlWithDepth> linksToFollow(ParsedPage page, int depth);
+    public abstract CrawlResult finish(PageSink sink);
 }
-

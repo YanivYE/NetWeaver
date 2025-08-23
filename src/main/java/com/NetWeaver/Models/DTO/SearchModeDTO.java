@@ -23,7 +23,7 @@ public class SearchModeDTO implements CrawlModeDTO {
     private float minRelevance;
 
     @Override
-    public CrawlMode getType() {
+    public CrawlMode type() {
         return type;
     }
 

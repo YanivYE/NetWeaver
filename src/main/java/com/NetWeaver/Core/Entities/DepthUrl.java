@@ -1,4 +1,4 @@
-package com.NetWeaver.Models;
+package com.NetWeaver.Core.Entities;
 
 import java.net.URI;
 

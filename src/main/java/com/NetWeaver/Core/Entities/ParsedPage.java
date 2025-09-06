@@ -1,5 +1,5 @@
 // com/NetWeaver/Handlers/ParsedPage.java
-package com.NetWeaver.Models;
+package com.NetWeaver.Core.Entities;
 
 import java.net.URI;
 import java.util.List;

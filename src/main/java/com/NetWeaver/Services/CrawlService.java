@@ -9,6 +9,7 @@ import com.NetWeaver.Engine.CrawlEngine;
 import com.NetWeaver.Handlers.ModeHandlerFactory;
 import com.NetWeaver.Sink.PageSink;
 import com.NetWeaver.Sink.PageSinkFactory;
+import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,12 +35,11 @@ public class CrawlService {
         jobService.createJob(crawlId, req.startUrl(), req.mode().type(), startedAt, CrawlStatus.QUEUED);
 
         ModeHandler handler = handlerFactory.getHandler(req.mode());
-        CrawlContext context = mapContext(req, handler);
 
         executor.submit(() -> {
             jobService.updateStatus(crawlId, CrawlStatus.RUNNING);
             try (PageSink sink = sinkFactory.createSink(crawlId, req.mode().type())) {
-                crawlEngine.run(context.withSink(sink));
+                crawlEngine.run(mapContext(crawlId, req, handler, sink));
                 jobService.updateStatus(crawlId, CrawlStatus.COMPLETED);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -56,16 +56,16 @@ public class CrawlService {
         );
     }
 
-    private CrawlContext mapContext(CrawlRequest req, ModeHandler handler) {
+    private CrawlContext mapContext(UUID crawlId, CrawlRequest req, ModeHandler handler, PageSink sink) {
         return new CrawlContext(
+                crawlId,
                 req.startUrl(),
                 req.depth(),
                 req.pages(),
                 req.timeLimit(),
                 req.userAgent(),
                 handler,
-                null
+                sink
         );
     }
-
 }

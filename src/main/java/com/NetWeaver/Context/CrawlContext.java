@@ -4,9 +4,11 @@ import com.NetWeaver.Handlers.ModeHandler;
 import com.NetWeaver.Sink.PageSink;
 
 import java.net.URI;
+import java.util.UUID;
 
 public class CrawlContext {
 
+    private UUID crawlId;
     private final URI startUri;
     private final int maxDepth;
     private final int maxPages;
@@ -15,7 +17,8 @@ public class CrawlContext {
     private final ModeHandler handler;
     private final PageSink sink;
 
-    public CrawlContext(URI startUri,
+    public CrawlContext(UUID crawlId,
+                        URI startUri,
                         int maxDepth,
                         int maxPages,
                         long timeLimit,
@@ -30,6 +33,10 @@ public class CrawlContext {
         this.handler = handler;
         this.sink = sink;
     }
+
+    public UUID getCrawlId() { return crawlId; }
+
+    public void setCrawlId(UUID id) { this.crawlId = id; }
 
     public URI getStartUri() {
         return startUri;
@@ -57,18 +64,5 @@ public class CrawlContext {
 
     public PageSink getSink() {
         return sink;
-    }
-
-    // Creates a new context with the same config but different sink
-    public CrawlContext withSink(PageSink newSink) {
-        return new CrawlContext(
-                this.startUri,
-                this.maxDepth,
-                this.maxPages,
-                this.timeLimit,
-                this.userAgent,
-                this.handler,
-                newSink
-        );
     }
 }

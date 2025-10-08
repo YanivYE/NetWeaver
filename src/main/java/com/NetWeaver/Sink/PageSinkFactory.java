@@ -15,22 +15,18 @@ public class PageSinkFactory {
     private DatabaseSink databaseSink;
 
     @Autowired
-    private KafkaSink kafkaSink;
-
-    @Autowired
-    private FileSinkFactory fileSinkFactory; // fileSinkFactory.forJob(uuid)
+    private FileSink fileSink;
 
     public PageSink createSink(UUID jobId, CrawlMode mode) {
         List<PageSink> sinks = new ArrayList<>();
 
-        // Always include these
-        sinks.add(databaseSink);
+        // Always include In-Memory
+        sinks.add(inMemorySink);
 
         // Mode-specific sinks
         switch (mode) {
-            case SEARCH -> sinks.add(kafkaSink);
-            case CORRELATION -> sinks.add(inMemorySink);
-            case SITEMAP -> sinks.add(fileSinkFactory.forJob(jobId)); // only Sitemap gets a file sink
+            case SEARCH, CORRELATION -> sinks.add(databaseSink);
+            case SITEMAP -> sinks.add(fileSink); // only Sitemap gets a file sink
         }
 
         return new CompositeSink(sinks);

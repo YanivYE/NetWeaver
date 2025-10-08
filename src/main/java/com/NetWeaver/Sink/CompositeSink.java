@@ -1,7 +1,6 @@
 package com.NetWeaver.Sink;
-
-import com.NetWeaver.Models.PageData;
 import java.util.List;
+import com.NetWeaver.Core.Entities.PageData;
 
 public class CompositeSink implements PageSink {
     private final List<PageSink> sinks;

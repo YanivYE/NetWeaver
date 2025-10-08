@@ -12,5 +12,6 @@ public class JobRepository {
     }
 
     public void createJob(UUID crawlId, URI uri, CrawlMode type, Instant startedAt, CrawlStatus crawlStatus) {
+        // Log and set in DB job status
     }
 }

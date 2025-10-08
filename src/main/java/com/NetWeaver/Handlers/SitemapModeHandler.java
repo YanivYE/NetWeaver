@@ -3,7 +3,7 @@ package com.NetWeaver.Handlers;
 import com.NetWeaver.Context.CrawlContext;
 import com.NetWeaver.Models.CrawlResult;
 import com.NetWeaver.Core.Entities.DepthUrl;
-import com.NetWeaver.Core.Entities.ParsedPage;
+import com.NetWeaver.Core.Entities.PageData;
 import com.NetWeaver.Sink.PageSink;
 
 import java.util.List;
@@ -12,12 +12,12 @@ public class SitemapModeHandler implements ModeHandler {
     public SitemapModeHandler() {}
 
     @Override
-    public void onPage(CrawlContext ctx, ParsedPage page, int depth, PageSink sink) {
+    public void onPage(CrawlContext ctx, PageData page, int depth, PageSink sink) {
 
     }
 
     @Override
-    public List<DepthUrl> linksToFollow(CrawlContext ctx, ParsedPage page, int depth) {
+    public List<DepthUrl> linksToFollow(CrawlContext ctx, PageData page, int depth) {
         return List.of();
     }
 

@@ -5,14 +5,14 @@ import java.net.URI;
 import java.util.List;
 
 /** Replace with your real ParsedPage if you already have it. */
-public class ParsedPage {
+public class PageData {
     private final URI uri;
     private final String title;
     private final String textContent; // normalized text
     private final List<URI> links;    // discovered links
     private final String contentType; // "text/html", "image/png", etc.
 
-    public ParsedPage(URI uri, String title, String textContent, List<URI> links, String contentType) {
+    public PageData(URI uri, String title, String textContent, List<URI> links, String contentType) {
         this.uri = uri;
         this.title = title;
         this.textContent = textContent;

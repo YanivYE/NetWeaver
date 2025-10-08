@@ -9,10 +9,8 @@ import com.NetWeaver.Engine.CrawlEngine;
 import com.NetWeaver.Handlers.ModeHandlerFactory;
 import com.NetWeaver.Sink.PageSink;
 import com.NetWeaver.Sink.PageSinkFactory;
-import org.hibernate.query.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -34,7 +32,7 @@ public class CrawlService {
 
         jobService.createJob(crawlId, req.startUrl(), req.mode().type(), startedAt, CrawlStatus.QUEUED);
 
-        ModeHandler handler = handlerFactory.getHandler(req.mode());
+        ModeHandler handler = handlerFactory.getHandler(req.mode().type());
 
         executor.submit(() -> {
             jobService.updateStatus(crawlId, CrawlStatus.RUNNING);

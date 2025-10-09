@@ -2,16 +2,20 @@ package com.NetWeaver.Core;
 
 import com.NetWeaver.Core.Entities.FetchResult;
 
+import java.net.URI;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
+
 public class RobotsService {
     private static final Pattern SITEMAP = Pattern.compile("^sitemap:", Pattern.CASE_INSENSITIVE);
     private final Map<String, RobotsTxt> cache = new ConcurrentHashMap<>();
     private final Fetcher fetcher;
 
-    public BasicRobots(Fetcher fetcher) {
+    public RobotsService(Fetcher fetcher) {
         this.fetcher = fetcher;
     }
 
-    @Override
     public boolean isAllowed(URI uri, String userAgent) {
         String host = uri.getHost();
         if (host == null) return true;

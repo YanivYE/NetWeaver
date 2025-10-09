@@ -1,13 +1,16 @@
 package com.NetWeaver.Core;
 
+import java.net.URI;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RateLimiter {
     private final Map<String, Instant> last = new ConcurrentHashMap<>();
     private final Duration minDelay;
 
-    public SimplePerHostLimiter(Duration minDelay) {
+    public RateLimiter(Duration minDelay) {
         this.minDelay = minDelay != null ? minDelay : Duration.ofMillis(400);
     }
 

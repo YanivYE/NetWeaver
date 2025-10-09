@@ -10,9 +10,15 @@ import org.springframework.context.annotation.Configuration;
 
 import java.time.Clock;
 import java.time.Duration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 public class CrawlConfig {
+    @Bean
+    public ExecutorService crawlerExecutor() {
+        return Executors.newFixedThreadPool(8);
+    }
 
     @Bean
     public Fetcher httpFetcher() {

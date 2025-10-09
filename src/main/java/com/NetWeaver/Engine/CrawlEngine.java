@@ -4,11 +4,12 @@ import com.NetWeaver.Context.CrawlContext;
 import com.NetWeaver.Core.*;
 import com.NetWeaver.Handlers.ModeHandler;
 import com.NetWeaver.Sink.PageSink;
-
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Clock;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.Objects;
 
 public class CrawlEngine {
@@ -44,113 +45,113 @@ public class CrawlEngine {
         final PageSink sink = ctx.getSink();
         final Instant started = clock.instant();
 
-        // Prepare
-        final String startUrlStr = ctx.getStartUrl();
-        final URI startUri = toUriOrNull(startUrlStr);
-        if (startUri == null) return;
+//        // Prepare
+//        final String startUrlStr = ctx.getStartUrl();
+//        final URI startUri = toUriOrNull(startUrlStr);
+//        if (startUri == null) return;
+//
+//        final Set<String> visited = ConcurrentHashMap.newKeySet();
+//        final int maxDepth = Math.max(0, ctx.getMaxDepth());
+//        final int maxPages = Math.max(1, ctx.getMaxPages());
+//        final int timeLimitSec = Math.max(0, ctx.getTimeLimit());
+//        final Instant deadline = timeLimitSec > 0 ? started.plusSeconds(timeLimitSec) : Instant.MAX;
+//
+//        // Seed frontier
+//        frontier.clear();
+//        String seed = normalizer.normalize(startUri);
+//        frontier.offer(new FrontierItem(startUri, 0, scorePriority(startUri, startUri)));
+//        visited.add(seed);
+//
+//        int pagesProcessed = 0;
+//
+//        while (!frontier.isEmpty()) {
+//            // Time limit check
+//            if (clock.instant().isAfter(deadline)) break;
+//
+//            final FrontierItem current = frontier.poll();
+//            if (current == null) break;
+//
+//            final URI uri = current.uri();
+//            final int depth = current.depth();
+//
+//            // Depth check
+//            if (depth > maxDepth) continue;
+//
+//            // Robots + politeness
+//            if (!robots.isAllowed(uri, ctx.getUserAgent())) {
+//                // optionally record a skip in sink
+//                continue;
+//            }
+//            rateLimiter.awaitPermit(uri); // per-host polite delay
+//
+//            // Fetch page
+//            FetchResult fetchResult;
+//            try {
+//                fetchResult = fetcher.fetch(uri, ctx.getUserAgent());
+//            } catch (IOException e) {
+//                // optionally sink error metric
+//                continue;
+//            }
+//            if (!fetchResult.ok()) {
+//                // optionally sink HTTP status
+//                continue;
+//            }
+//
+//            // Parse to get title, text, links, contentType
+//            ParsedPage page;
+//            try {
+//                page = parser.parse(uri, fetchResult);
+//            } catch (Exception parseErr) {
+//                // optionally sink parse error
+//                continue;
+//            }
+//
+//            // Handler hook: index/graph/map this page
+//            try {
+//                handler.onPage(ctx, page, depth, sink);
+//            } catch (Exception handlerErr) {
+//                // don't let handler crash the crawl
+//            }
+//
+//            pagesProcessed++;
+//            if (pagesProcessed >= maxPages) break;
+//
+//            // Get next links to follow from handler (mode-specific strategy)
+//            List<UrlWithDepth> nexts = Collections.emptyList();
+//            try {
+//                nexts = handler.linksToFollow(ctx, page, depth);
+//            } catch (Exception handlerErr) {
+//                // ignore and continue
+//            }
+//            if (nexts == null || nexts.isEmpty()) continue;
+//
+//            for (UrlWithDepth n : nexts) {
+//                if (n == null || n.url == null) continue;
+//
+//                URI normalized = normalizeChild(uri, n.url);
+//                if (normalized == null) continue;
+//
+//                String key = normalizer.normalize(normalized);
+//
+//                // Deduplicate & push to frontier
+//                if (visited.add(key)) {
+//                    // Optional: domain restriction (if you have ctx.domainRestrictions())
+//                    if (!isWithinRestrictions(startUri, normalized, ctx)) continue;
+//
+//                    int nextDepth = n.depth;
+//                    if (nextDepth <= maxDepth) {
+//                        double priority = scorePriority(startUri, normalized);
+//                        frontier.offer(new FrontierItem(normalized, nextDepth, priority));
+//                    }
+//                }
+//            }
+//        }
 
-        final Set<String> visited = ConcurrentHashMap.newKeySet();
-        final int maxDepth = Math.max(0, ctx.getMaxDepth());
-        final int maxPages = Math.max(1, ctx.getMaxPages());
-        final int timeLimitSec = Math.max(0, ctx.getTimeLimit());
-        final Instant deadline = timeLimitSec > 0 ? started.plusSeconds(timeLimitSec) : Instant.MAX;
-
-        // Seed frontier
-        frontier.clear();
-        String seed = normalizer.normalize(startUri);
-        frontier.offer(new FrontierItem(startUri, 0, scorePriority(startUri, startUri)));
-        visited.add(seed);
-
-        int pagesProcessed = 0;
-
-        while (!frontier.isEmpty()) {
-            // Time limit check
-            if (clock.instant().isAfter(deadline)) break;
-
-            final FrontierItem current = frontier.poll();
-            if (current == null) break;
-
-            final URI uri = current.uri();
-            final int depth = current.depth();
-
-            // Depth check
-            if (depth > maxDepth) continue;
-
-            // Robots + politeness
-            if (!robots.isAllowed(uri, ctx.getUserAgent())) {
-                // optionally record a skip in sink
-                continue;
-            }
-            rateLimiter.awaitPermit(uri); // per-host polite delay
-
-            // Fetch page
-            FetchResult fetchResult;
-            try {
-                fetchResult = fetcher.fetch(uri, ctx.getUserAgent());
-            } catch (IOException e) {
-                // optionally sink error metric
-                continue;
-            }
-            if (!fetchResult.ok()) {
-                // optionally sink HTTP status
-                continue;
-            }
-
-            // Parse to get title, text, links, contentType
-            ParsedPage page;
-            try {
-                page = parser.parse(uri, fetchResult);
-            } catch (Exception parseErr) {
-                // optionally sink parse error
-                continue;
-            }
-
-            // Handler hook: index/graph/map this page
-            try {
-                handler.onPage(ctx, page, depth, sink);
-            } catch (Exception handlerErr) {
-                // don't let handler crash the crawl
-            }
-
-            pagesProcessed++;
-            if (pagesProcessed >= maxPages) break;
-
-            // Get next links to follow from handler (mode-specific strategy)
-            List<UrlWithDepth> nexts = Collections.emptyList();
-            try {
-                nexts = handler.linksToFollow(ctx, page, depth);
-            } catch (Exception handlerErr) {
-                // ignore and continue
-            }
-            if (nexts == null || nexts.isEmpty()) continue;
-
-            for (UrlWithDepth n : nexts) {
-                if (n == null || n.url == null) continue;
-
-                URI normalized = normalizeChild(uri, n.url);
-                if (normalized == null) continue;
-
-                String key = normalizer.normalize(normalized);
-
-                // Deduplicate & push to frontier
-                if (visited.add(key)) {
-                    // Optional: domain restriction (if you have ctx.domainRestrictions())
-                    if (!isWithinRestrictions(startUri, normalized, ctx)) continue;
-
-                    int nextDepth = n.depth;
-                    if (nextDepth <= maxDepth) {
-                        double priority = scorePriority(startUri, normalized);
-                        frontier.offer(new FrontierItem(normalized, nextDepth, priority));
-                    }
-                }
-            }
-        }
-
-        // Handler finalize
-        try {
-            handler.finish(ctx, sink);
-        } catch (Exception ignored) {
-        }
+//        // Handler finalize
+//        try {
+//            handler.finish(ctx, sink);
+//        } catch (Exception ignored) {
+//        }
     }
 
     private boolean isWithinRestrictions(URI start, URI target, CrawlContext ctx) {

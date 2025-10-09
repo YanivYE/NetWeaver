@@ -1,11 +1,24 @@
 package com.NetWeaver.Core;
 
+import com.NetWeaver.Core.Entities.FetchResult;
+
+import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Locale;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
+
 public class Fetcher {
     private final HttpClient client;
     private final Duration requestTimeout;
     private final int maxBytes;
 
-    public HttpFetcher(Duration connectTimeout, Duration requestTimeout, boolean followRedirects, int maxBytes) {
+    public Fetcher(Duration connectTimeout, Duration requestTimeout, boolean followRedirects, int maxBytes) {
         this.client = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .followRedirects(followRedirects ? HttpClient.Redirect.NORMAL : HttpClient.Redirect.NEVER)
@@ -15,8 +28,7 @@ public class Fetcher {
         this.maxBytes = maxBytes > 0 ? maxBytes : 3 * 1024 * 1024; // 3MB cap
     }
 
-    @Override
-    public CrawlEngine.FetchResult fetch(URI uri, String userAgent) throws IOException {
+    public FetchResult fetch(URI uri, String userAgent) throws IOException {
         HttpRequest req = HttpRequest.newBuilder(uri)
                 .timeout(requestTimeout)
                 .GET()
@@ -49,7 +61,7 @@ public class Fetcher {
                 contentType = (semi > 0 ? contentType.substring(0, semi) : contentType).trim().toLowerCase(Locale.ROOT);
             }
 
-            return new CrawlEngine.FetchResult(status, contentType, body);
+            return new FetchResult(status, contentType, body);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new IOException("Interrupted while fetching " + uri, e);

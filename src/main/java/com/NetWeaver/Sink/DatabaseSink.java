@@ -1,7 +1,9 @@
 package com.NetWeaver.Sink;
 
 import com.NetWeaver.Core.Entities.PageData;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DatabaseSink implements PageSink {
 
     @Override

@@ -1,7 +1,9 @@
 package com.NetWeaver.Sink;
 import java.util.List;
 import com.NetWeaver.Core.Entities.PageData;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CompositeSink implements PageSink {
     private final List<PageSink> sinks;
 

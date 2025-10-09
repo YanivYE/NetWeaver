@@ -1,6 +1,8 @@
 package com.NetWeaver.Core;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Locale;
 
 public class UrlNormalizer {
